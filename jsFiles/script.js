@@ -32,12 +32,17 @@ function save() {
 	var tensor = resized.expandDims(0);
     var prediction = model.predict(tensor);
     var pIndex = tf.argMax(prediction[0], 1).dataSync();
-    var prom = prediction[1].array();
-    var bbox;
-    prom.then(function(value) {
-        bbox = value;
-    });
+    var bbox = prediction[1].dataSync();
     console.log(bbox);
+	var l = bbox[0];
+	var r = bbox[1];
+	var u = bbox[2];
+	var d = bbox[3];
+	ctx.beginPath();
+	ctx.lineWidth = 6;
+	ctx.strokeStyle = 'red';
+	ctx.rect(l+120, r+100, u+120, d+180);
+	ctx.stroke();
     document.getElementById("pred").innerHTML = "Predicted: " + pIndex.toString();
 }
     
